@@ -48,13 +48,13 @@ function RolleLayout(): ReactElement {
   useEffect(() => setMsg(null), [pfad, setMsg]);
 
   // Alle 5 Sekunden aktualisieren (nicht während ein Formular offen ist) – wie in der Vorlage
-  useEffect(() => {
-    const t = setInterval(() => {
-      const tab = router.state.location.pathname.split('/')[2];
-      if (!document.querySelector('main form') && tab !== 'tablett' && tab !== 'eigene') void router.invalidate();
-    }, 5000);
-    return () => clearInterval(t);
-  }, [router]);
+  // useEffect(() => {
+  //   const t = setInterval(() => {
+  //     const tab = router.state.location.pathname.split('/')[2];
+  //     if (!document.querySelector('main form') && tab !== 'tablett' && tab !== 'eigene') void router.invalidate();
+  //   }, 5000);
+  //   return () => clearInterval(t);
+  // }, [router]);
 
   return (
     <>

@@ -9,7 +9,7 @@ import { config } from '../config';
 async function main() {
   const { database, ...verbindung } = config.db;
   const conn = await mysql.createConnection({ ...verbindung, charset: 'utf8mb4', multipleStatements: true });
-  const dateien = ['schema.sql', ...(process.argv.includes('--leer') ? [] : ['seed.sql'])];
+  const dateien = ['schema.sql'];
   await conn.query(`DROP DATABASE IF EXISTS \`${database}\``);
   await conn.query(`CREATE DATABASE \`${database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
   await conn.query(`USE \`${database}\``);

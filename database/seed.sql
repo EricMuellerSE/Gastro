@@ -14,6 +14,7 @@ INSERT INTO mitarbeiter (ID, rolleID, vorname, name, email, passwort, eintrittsd
 (1, 1, 'Meric', 'Üller',   'meric@gastro.de',   'scrypt$a6bc4a8de536bf1cc7b6ca8ea5e206cc$ffeed56f117cbff596f8d97e5e518169cc5452477ed7381f1e79f24f27db79fe48842dedf87ce99b5895138544424d78baadfc03013ea51798ffc65bd351cf97', '2021-03-01', TRUE),
 (2, 1, 'Werner', 'GPunkt',   'werner@gastro.de',   'scrypt$a6bc4a8de536bf1cc7b6ca8ea5e206cc$ffeed56f117cbff596f8d97e5e518169cc5452477ed7381f1e79f24f27db79fe48842dedf87ce99b5895138544424d78baadfc03013ea51798ffc65bd351cf97', '2021-03-01', TRUE),
 (3, 1, 'Finn', 'Cock',   'finn@gastro.de',   'scrypt$a6bc4a8de536bf1cc7b6ca8ea5e206cc$ffeed56f117cbff596f8d97e5e518169cc5452477ed7381f1e79f24f27db79fe48842dedf87ce99b5895138544424d78baadfc03013ea51798ffc65bd351cf97', '2021-03-01', TRUE);
+(4, 1, 'Yuman', 'Yuman',   'yuman@gastro.de',   'scrypt$a6bc4a8de536bf1cc7b6ca8ea5e206cc$ffeed56f117cbff596f8d97e5e518169cc5452477ed7381f1e79f24f27db79fe48842dedf87ce99b5895138544424d78baadfc03013ea51798ffc65bd351cf97', '2021-03-01', TRUE);
 
 INSERT INTO tisch (ID, tischnummer, sitzplaetze, status) VALUES
 (1, 1, 4, 'besetzt'), (2, 2, 2, 'besetzt'), (3, 3, 4, 'besetzt'), (4, 4, 2, 'besetzt'),
@@ -124,4 +125,4 @@ INSERT INTO lagerbewegung (ID, zutatID, mitarbeiterID, bewegungsart, menge, zeit
 (4, 10, 2,    'Eingang',   150,  NOW() - INTERVAL 3 DAY,  'Frischelieferung Minze'),
 (5, 10, 2,    'Schwund',    70,  NOW() - INTERVAL 1 DAY,  'Minze welk, entsorgt'),
 (6, 17, 3,    'Korrektur', -50,  NOW() - INTERVAL 2 DAY,  'Inventur: Differenz Kaffeebohnen'),
-(7, 8,  NULL, 'Eingang',  10000, NOW() - INTERVAL 1 DAY,  'Lieferung Cola');
+(7, 8,  3, 'Eingang',  10000, NOW() - INTERVAL 1 DAY,  'Lieferung Cola');

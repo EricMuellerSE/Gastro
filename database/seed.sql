@@ -12,7 +12,8 @@ INSERT INTO rolle (ID, name, beschreibung) VALUES
 -- Anmeldung mit E-Mail und Passwort "passwort123" (nur Testdaten!). Gespeichert wird ein scrypt-Hash.
 INSERT INTO mitarbeiter (ID, rolleID, vorname, name, email, passwort, eintrittsdatum, aktiv) VALUES
 (1, 1, 'Meric', 'Üller',   'meric@gastro.de',   'scrypt$a6bc4a8de536bf1cc7b6ca8ea5e206cc$ffeed56f117cbff596f8d97e5e518169cc5452477ed7381f1e79f24f27db79fe48842dedf87ce99b5895138544424d78baadfc03013ea51798ffc65bd351cf97', '2021-03-01', TRUE),
-(1, 1, 'Werner', 'GPunkt',   'Werner@gastro.de',   'scrypt$a6bc4a8de536bf1cc7b6ca8ea5e206cc$ffeed56f117cbff596f8d97e5e518169cc5452477ed7381f1e79f24f27db79fe48842dedf87ce99b5895138544424d78baadfc03013ea51798ffc65bd351cf97', '2021-03-01', TRUE);
+(2, 1, 'Werner', 'GPunkt',   'Werner@gastro.de',   'scrypt$a6bc4a8de536bf1cc7b6ca8ea5e206cc$ffeed56f117cbff596f8d97e5e518169cc5452477ed7381f1e79f24f27db79fe48842dedf87ce99b5895138544424d78baadfc03013ea51798ffc65bd351cf97', '2021-03-01', TRUE);
+(3, 1, 'Finn', 'Cock',   'finn@gastro.de',   'scrypt$a6bc4a8de536bf1cc7b6ca8ea5e206cc$ffeed56f117cbff596f8d97e5e518169cc5452477ed7381f1e79f24f27db79fe48842dedf87ce99b5895138544424d78baadfc03013ea51798ffc65bd351cf97', '2021-03-01', TRUE);
 
 INSERT INTO tisch (ID, tischnummer, sitzplaetze, status) VALUES
 (1, 1, 4, 'besetzt'), (2, 2, 2, 'besetzt'), (3, 3, 4, 'besetzt'), (4, 4, 2, 'besetzt'),

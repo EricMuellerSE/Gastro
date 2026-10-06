@@ -1,17 +1,17 @@
 import type { Rolle } from './constants';
 import type {
-  Bestellformular, BarBestellung, LagerDaten, LagerZeile, MitarbeiterDaten, Rechnung, RezeptDaten, Tisch, UmsatzDaten,
+  Benutzer, Bestellformular, BarBestellung, LagerDaten, LagerZeile, MitarbeiterDaten, Rechnung, RezeptDaten, Tisch, UmsatzDaten,
 } from './types';
 
 type Formular = Record<string, string>;
 export interface Zeile { id: number; menge: number }
 
-async function anfrage<T>(rolle: Rolle, methode: string, pfad: string, body?: unknown): Promise<T> {
+async function anfrage<T>(rolle: Rolle | null, methode: string, pfad: string, body?: unknown): Promise<T> {
   let res: Response;
   try {
     res = await fetch('/api' + pfad, {
       method: methode,
-      headers: { 'Content-Type': 'application/json', 'X-Rolle': rolle },
+      headers: { 'Content-Type': 'application/json', ...(rolle ? { 'X-Rolle': rolle } : {}) },
       body: body === undefined ? undefined : JSON.stringify(body),
     });
   } catch {
@@ -26,6 +26,11 @@ const lagerPfad = (z: LagerZeile) => `/lager/${z.zutatID}/${z.chargenID}`;
 type Anzahl = { nachbestellungen: number };
 
 export const api = {
+  // Anmeldung (Sitzung läuft über ein HttpOnly-Cookie)
+  ich: () => anfrage<{ benutzer: Benutzer | null }>(null, 'GET', '/auth/ich'),
+  login: (email: string, passwort: string) => anfrage<{ benutzer: Benutzer }>(null, 'POST', '/auth/login', { email, passwort }),
+  logout: () => anfrage<unknown>(null, 'POST', '/auth/logout'),
+
   mitarbeiter: (r: Rolle) => anfrage<MitarbeiterDaten>(r, 'GET', '/mitarbeiter'),
   mitarbeiterSpeichern: (r: Rolle, d: Formular, id?: number) =>
     id ? anfrage<Anzahl>(r, 'PUT', `/mitarbeiter/${id}`, d) : anfrage<Anzahl>(r, 'POST', '/mitarbeiter', d),

@@ -371,3 +371,43 @@ select:focus-visible {
 .klein {
   font-size: .8rem
 }
+
+/* Konto-Bereich im Kopf (Angemeldet als …, Abmelden / Login) */
+#konto {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px
+}
+
+#konto .name {
+  font-size: .9rem;
+  opacity: .9
+}
+
+#konto button {
+  border: 1px solid rgba(255, 255, 255, .55);
+  background: transparent;
+  color: var(--ai);
+  font: inherit;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 7px;
+  cursor: pointer
+}
+
+#konto button:hover {
+  background: rgba(255, 255, 255, .15)
+}
+
+#konto button:focus-visible {
+  outline: 3px solid var(--ai);
+  outline-offset: 2px
+}
+
+.rechts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px
+}

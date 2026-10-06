@@ -9,13 +9,13 @@ INSERT INTO rolle (ID, name, beschreibung) VALUES
 (2, 'Barkeeper',        'Getränkezubereitung, Rezepte'),
 (3, 'Lager / Bediener', 'Lagerverwaltung und Bestellungen');
 
--- Passwörter sind Platzhalter (die Oberfläche nutzt keine Anmeldung)
+-- Anmeldung mit E-Mail und Passwort "passwort123" (nur Testdaten!). Gespeichert wird ein scrypt-Hash.
 INSERT INTO mitarbeiter (ID, rolleID, vorname, name, email, passwort, eintrittsdatum, aktiv) VALUES
-(1, 3, 'Anna', 'Berger',   'anna.berger@restaurant.de',   'platzhalter', '2021-03-01', TRUE),
-(2, 2, 'Marco','Vogt',     'marco.vogt@restaurant.de',    'platzhalter', '2020-06-15', TRUE),
-(3, 1, 'Lena', 'Fuchs',    'lena.fuchs@restaurant.de',    'platzhalter', '2019-01-10', TRUE),
-(4, 3, 'Tim',  'Roth',     'tim.roth@restaurant.de',      'platzhalter', '2023-09-01', TRUE),
-(5, 2, 'Eva',  'Hoffmann', 'eva.hoffmann@restaurant.de',  'platzhalter', '2018-11-20', FALSE);
+(1, 3, 'Anna', 'Berger',   'anna.berger@restaurant.de',   'scrypt$a6bc4a8de536bf1cc7b6ca8ea5e206cc$ffeed56f117cbff596f8d97e5e518169cc5452477ed7381f1e79f24f27db79fe48842dedf87ce99b5895138544424d78baadfc03013ea51798ffc65bd351cf97', '2021-03-01', TRUE),
+(2, 2, 'Marco','Vogt',     'marco.vogt@restaurant.de',    'scrypt$151f0947caa60a963dd351b148fe7ec8$19047c44093061b5f6779253b0d82a770abf54f462a4f42dcf584f1441a8dbeb4364f42806e7f0af32dbd673c88b3499f9a58edf249f3919ffd5427a85601322', '2020-06-15', TRUE),
+(3, 1, 'Lena', 'Fuchs',    'lena.fuchs@restaurant.de',    'scrypt$457fcbffc5087e361af99a4243565e9a$b8e546ec8f8c4b6066f0752dbaa1c74806a1e588a77129b4aced44ad3a7030d4e0dba66604f5125fea38515c8ab767ca6240959176597ccdac677437884e37ac', '2019-01-10', TRUE),
+(4, 3, 'Tim',  'Roth',     'tim.roth@restaurant.de',      'scrypt$e117eaae0ecdb7fc3db65a1747b38c7e$a9d688f93c1fd6cf3d797204c0199f0c09da7be0a7534e8fb910da09325b91588888bc3eff04c17acd6f1b8fb17c4be64e433be9b62e62994457e384bf028ab1', '2023-09-01', TRUE),
+(5, 2, 'Eva',  'Hoffmann', 'eva.hoffmann@restaurant.de',  'scrypt$9852dc97905ba33d5a401fa766803b67$90836b3d320b179847ff12cac375c1e19025417f313c1e8d8b36b63a7580928c2c1687abbfb626fe87787886b3bde9c923c4456d82ca273ae36f27932ab39c8a', '2018-11-20', FALSE);
 
 INSERT INTO tisch (ID, tischnummer, sitzplaetze, status) VALUES
 (1, 1, 4, 'besetzt'), (2, 2, 2, 'besetzt'), (3, 3, 4, 'besetzt'), (4, 4, 2, 'besetzt'),

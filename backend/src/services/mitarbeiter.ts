@@ -1,11 +1,6 @@
-import { randomBytes, scryptSync } from 'crypto';
 import { pool, q, run } from '../db';
+import { hashPasswort } from '../passwort';
 import { AppError, Rolle, darf, datumWert, idWert, text } from '../util';
-
-const hashPasswort = (pw: string) => {
-  const salt = randomBytes(16);
-  return `scrypt$${salt.toString('hex')}$${scryptSync(pw, salt, 64).toString('hex')}`;
-};
 
 export async function liste(rolle: Rolle) {
   darf(rolle, 'mitarbeiter');

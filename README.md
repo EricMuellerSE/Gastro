@@ -13,7 +13,7 @@ Aussehen (CSS) und Funktionen der Vorlage sind übernommen.
 
 ```bash
 npm install
-cp backend/.env.example backend/.env     # DB_USER / DB_PASSWORD anpassen
+cp backend/.env.example backend/.env     # DB_USER / DB_PASSWORD anpassen, SESSION_SECRET setzen
 npm run db:init                          # Datenbank anlegen + Testdaten (löscht die DB "restaurant"!)
 npm run dev                              # API: http://localhost:3001, Oberfläche: http://localhost:5173
 ```
@@ -21,6 +21,19 @@ npm run dev                              # API: http://localhost:3001, Oberfläc
 Nur Schema ohne Testdaten: `npm run db:init -- --leer`
 
 Produktion: `npm run build && npm start` – das Backend liefert dann auch die Oberfläche aus (http://localhost:3001).
+
+## Anmeldung
+
+- Ohne Anmeldung ist nur die **Kundenansicht (Tablet)** erreichbar. Dort gibt es oben rechts den Button **Login**.
+- Mitarbeiter melden sich mit E-Mail und Passwort an und sehen danach die Bereiche ihrer **Rolle aus der Datenbank**
+  (`Admin`, `Barkeeper`, `Lager / Bediener`). Zusätzlich können sie in die Kundenansicht wechseln und zurück.
+- **Abmelden** führt zurück in die Kundenansicht (das Tablet bleibt so im Gästemodus).
+- Testzugänge (Passwort bei allen: `passwort123`): `lena.fuchs@restaurant.de` (Admin), `marco.vogt@restaurant.de` (Barkeeper),
+  `anna.berger@restaurant.de` und `tim.roth@restaurant.de` (Lager / Bediener).
+- Sicherheit: Sitzung als signiertes HttpOnly-Cookie (8 h), Passwörter als scrypt-Hash, Rolle und Aktiv-Status werden bei
+  **jeder** Anfrage aus der Datenbank gelesen (deaktivierte Mitarbeiter sind sofort ausgesperrt), 5 Fehlversuche pro
+  E-Mail sperren die Anmeldung für 15 Minuten. Die Rechtsprüfung der Funktionen im Backend bleibt zusätzlich bestehen.
+- Schritt-für-Schritt-Anleitung zum Einbau in ein bestehendes Projekt: `ANLEITUNG_LOGIN.md`.
 
 ## Aufbau
 
@@ -68,5 +81,5 @@ Beim Bestellen werden Zutaten nach Haltbarkeit (früheste zuerst) aus den Charge
 - **Nachbestellmenge:** Zahlenfeld statt Auswahl 5–100, da Mengen jetzt in ml/g/Stück angegeben werden.
 - **Tische:** Statt der Gästezahl wird die Anzahl der Sitzplätze angezeigt (`tisch.sitzplaetze`);
   „besetzt“ ergibt sich aus `tisch.status`.
-- **Rollen:** Wie in der Vorlage gibt es einen Rollenumschalter, keine Anmeldung. Die gewählte Rolle wird als
-  Header `X-Rolle` gesendet und serverseitig geprüft – das ist **keine echte Authentifizierung**.
+- **Rollen:** Der Rollenumschalter der Vorlage ist durch die Anmeldung ersetzt. Der Header `X-Rolle` nennt nur noch die
+  Ansicht und wird gegen die angemeldete Rolle geprüft (`kunde` ist ohne Anmeldung erlaubt).

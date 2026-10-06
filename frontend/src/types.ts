@@ -1,3 +1,8 @@
+import type { Rolle } from './constants';
+
+/** Angemeldeter Mitarbeiter; rolle = Ansicht, die ihm zusteht (aus der Rolle in der Datenbank) */
+export interface Benutzer { id: number; name: string; rolle: Rolle; rolleName: string }
+
 export interface Mitarbeiter { id: number; vorname: string; name: string; email: string; rolleID: number; rolle: string; eintritt: string }
 export interface MitarbeiterDaten { mitarbeiter: Mitarbeiter[]; rollen: { id: number; name: string }[] }
 

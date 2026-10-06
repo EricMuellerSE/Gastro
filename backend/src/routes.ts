@@ -6,18 +6,55 @@ import * as rezepte from './services/rezepte';
 import * as tische from './services/tische';
 import * as berichte from './services/berichte';
 import * as bestellungen from './services/bestellungen';
+import * as auth from './services/auth';
+import { erzeugeToken, loescheCookie, pruefeToken, setzeCookie, tokenAusRequest } from './session';
 
 export const api = Router();
 
+/* ---------- Anmeldung (öffentlich) ---------- */
+api.post('/auth/login', async (req, res, next) => {
+  try {
+    const benutzer = await auth.anmelden(req.body?.email, req.body?.passwort);
+    setzeCookie(res, erzeugeToken(benutzer.id));
+    res.json({ benutzer });
+  } catch (e) {
+    next(e);
+  }
+});
+api.post('/auth/logout', (_req, res) => {
+  loescheCookie(res);
+  res.json({ ok: true });
+});
+api.get('/auth/ich', async (req, res, next) => {
+  try {
+    const id = pruefeToken(tokenAusRequest(req));
+    res.json({ benutzer: id ? await auth.benutzerLaden(id) : null });
+  } catch (e) {
+    next(e);
+  }
+});
+
 /*
- * Die Oberfläche kennt keine Anmeldung, sondern einen Rollenumschalter (wie die Vorlage).
- * Die gewählte Rolle kommt im Header "X-Rolle"; alle Rechte werden serverseitig geprüft.
+ * Rollenprüfung für alle übrigen Endpunkte: Der Header "X-Rolle" nennt die Ansicht, in der die Anfrage gestellt wird.
+ *  - "kunde" (Tablet) ist ohne Anmeldung erlaubt.
+ *  - Jede andere Rolle ist nur erlaubt, wenn der angemeldete Mitarbeiter genau diese Rolle hat.
+ * Die einzelnen Funktionen prüfen anschließend ihre Rechte zusätzlich in der Anwendungslogik.
  */
-api.use((req: Request, res: Response, next: NextFunction) => {
-  const rolle = req.header('x-rolle');
-  if (!istRolle(rolle)) return next(new AppError('Unbekannte oder fehlende Rolle.', 400));
-  res.locals.rolle = rolle;
-  next();
+api.use(async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const gewuenscht = req.header('x-rolle');
+    if (!istRolle(gewuenscht)) throw new AppError('Unbekannte oder fehlende Rolle.', 400);
+    if (gewuenscht !== 'kunde') {
+      const id = pruefeToken(tokenAusRequest(req));
+      const benutzer = id ? await auth.benutzerLaden(id) : null;
+      if (!benutzer) throw new AppError('Bitte melde dich an.', 401);
+      if (benutzer.rolle !== gewuenscht) throw new AppError('Keine Berechtigung für diese Rolle.', 403);
+    }
+    res.locals.rolle = gewuenscht;
+    next();
+  } catch (e) {
+    next(e);
+  }
 });
 
 type Handler = (req: Request, rolle: Rolle) => Promise<unknown> | unknown;

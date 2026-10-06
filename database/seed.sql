@@ -11,11 +11,8 @@ INSERT INTO rolle (ID, name, beschreibung) VALUES
 
 -- Anmeldung mit E-Mail und Passwort "passwort123" (nur Testdaten!). Gespeichert wird ein scrypt-Hash.
 INSERT INTO mitarbeiter (ID, rolleID, vorname, name, email, passwort, eintrittsdatum, aktiv) VALUES
-(1, 3, 'Anna', 'Berger',   'anna.berger@restaurant.de',   'scrypt$a6bc4a8de536bf1cc7b6ca8ea5e206cc$ffeed56f117cbff596f8d97e5e518169cc5452477ed7381f1e79f24f27db79fe48842dedf87ce99b5895138544424d78baadfc03013ea51798ffc65bd351cf97', '2021-03-01', TRUE),
-(2, 2, 'Marco','Vogt',     'marco.vogt@restaurant.de',    'scrypt$151f0947caa60a963dd351b148fe7ec8$19047c44093061b5f6779253b0d82a770abf54f462a4f42dcf584f1441a8dbeb4364f42806e7f0af32dbd673c88b3499f9a58edf249f3919ffd5427a85601322', '2020-06-15', TRUE),
-(3, 1, 'Lena', 'Fuchs',    'lena.fuchs@restaurant.de',    'scrypt$457fcbffc5087e361af99a4243565e9a$b8e546ec8f8c4b6066f0752dbaa1c74806a1e588a77129b4aced44ad3a7030d4e0dba66604f5125fea38515c8ab767ca6240959176597ccdac677437884e37ac', '2019-01-10', TRUE),
-(4, 3, 'Tim',  'Roth',     'tim.roth@restaurant.de',      'scrypt$e117eaae0ecdb7fc3db65a1747b38c7e$a9d688f93c1fd6cf3d797204c0199f0c09da7be0a7534e8fb910da09325b91588888bc3eff04c17acd6f1b8fb17c4be64e433be9b62e62994457e384bf028ab1', '2023-09-01', TRUE),
-(5, 2, 'Eva',  'Hoffmann', 'eva.hoffmann@restaurant.de',  'scrypt$9852dc97905ba33d5a401fa766803b67$90836b3d320b179847ff12cac375c1e19025417f313c1e8d8b36b63a7580928c2c1687abbfb626fe87787886b3bde9c923c4456d82ca273ae36f27932ab39c8a', '2018-11-20', FALSE);
+(1, 1, 'Meric', 'Üller',   'meric@gastro.de',   'scrypt$a6bc4a8de536bf1cc7b6ca8ea5e206cc$ffeed56f117cbff596f8d97e5e518169cc5452477ed7381f1e79f24f27db79fe48842dedf87ce99b5895138544424d78baadfc03013ea51798ffc65bd351cf97', '2021-03-01', TRUE),
+(1, 1, 'Werner', 'GPunkt',   'Werner@gastro.de',   'scrypt$a6bc4a8de536bf1cc7b6ca8ea5e206cc$ffeed56f117cbff596f8d97e5e518169cc5452477ed7381f1e79f24f27db79fe48842dedf87ce99b5895138544424d78baadfc03013ea51798ffc65bd351cf97', '2021-03-01', TRUE);
 
 INSERT INTO tisch (ID, tischnummer, sitzplaetze, status) VALUES
 (1, 1, 4, 'besetzt'), (2, 2, 2, 'besetzt'), (3, 3, 4, 'besetzt'), (4, 4, 2, 'besetzt'),
@@ -127,46 +124,3 @@ INSERT INTO lagerbewegung (ID, zutatID, mitarbeiterID, bewegungsart, menge, zeit
 (5, 10, 2,    'Schwund',    70,  NOW() - INTERVAL 1 DAY,  'Minze welk, entsorgt'),
 (6, 17, 3,    'Korrektur', -50,  NOW() - INTERVAL 2 DAY,  'Inventur: Differenz Kaffeebohnen'),
 (7, 8,  NULL, 'Eingang',  10000, NOW() - INTERVAL 1 DAY,  'Lieferung Cola');
-
--- Bestellungen: Tablet-Bestellungen haben einen Tisch, eigene Bestellungen einen Mitarbeiter.
-INSERT INTO bestellung (ID, mitarbeiterID, tischID, bestellzeit, status, gesamtbetrag) VALUES
-(1,  NULL, 1,    NOW() - INTERVAL 12 MINUTE,  'in Bearbeitung', 13.00),
-(2,  NULL, 1,    NOW() - INTERVAL 3 MINUTE,   'in Bearbeitung', 11.00),
-(3,  NULL, 7,    NOW() - INTERVAL 34 MINUTE,  'in Bearbeitung', 17.40),
-(4,  NULL, 2,    NOW() - INTERVAL 55 MINUTE,  'fertig',          5.60),
-(5,  NULL, 3,    NOW() - INTERVAL 80 MINUTE,  'fertig',         16.50),
-(6,  NULL, 4,    NOW() - INTERVAL 110 MINUTE, 'fertig',          7.60),
-(7,  NULL, 5,    NOW() - INTERVAL 6 MINUTE,   'in Bearbeitung',  2.80),
-(8,  NULL, 7,    NOW() - INTERVAL 30 MINUTE,  'in Bearbeitung', 19.00),
-(9,  NULL, 2,    NOW() - INTERVAL 1 DAY,      'fertig',          7.00),
-(10, NULL, 3,    NOW() - INTERVAL 2 DAY,      'fertig',         22.00),
-(11, NULL, 6,    NOW() - INTERVAL 2 DAY,      'fertig',         11.40),
-(12, NULL, 8,    NOW() - INTERVAL 3 DAY,      'fertig',         11.20),
-(13, NULL, 1,    NOW() - INTERVAL 5 DAY,      'fertig',         22.80),
-(14, 2,    NULL, NOW() - INTERVAL 20 MINUTE,  'in Bearbeitung',  2.80);
-
--- Positionen (bestellID, gerichtID, menge, status)
-INSERT INTO bestellposition (bestellID, gerichtID, menge, status) VALUES
-(1, 1, 2, 'in Bearbeitung'), (1, 2, 2, 'in Bearbeitung'),
-(2, 6, 2, 'in Bearbeitung'),
-(3, 3, 3, 'in Bearbeitung'), (3, 2, 2, 'in Bearbeitung'),
-(4, 11, 2, 'fertig'),
-(5, 6, 3, 'fertig'),
-(6, 3, 2, 'fertig'),
-(7, 11, 1, 'in Bearbeitung'),
-(8, 3, 5, 'in Bearbeitung'),
-(9, 1, 2, 'fertig'),
-(10, 6, 4, 'fertig'),
-(11, 3, 3, 'fertig'),
-(12, 11, 4, 'fertig'),
-(13, 3, 6, 'fertig'),
-(14, 11, 1, 'in Bearbeitung');
-
--- Zahlungen (nur für bezahlte Bestellungen)
-INSERT INTO zahlung (ID, bestellID, zahlungsart, betrag, zahlungszeit, status) VALUES
-(1, 6,  'Karte', 7.60,  NOW(),                                         'bezahlt'),
-(2, 9,  'Bar',   7.00,  TIMESTAMP(CURDATE() - INTERVAL 1 DAY, '19:00:00'), 'bezahlt'),
-(3, 10, 'Karte', 22.00, TIMESTAMP(CURDATE() - INTERVAL 2 DAY, '19:00:00'), 'bezahlt'),
-(4, 11, 'Bar',   11.40, TIMESTAMP(CURDATE() - INTERVAL 2 DAY, '19:30:00'), 'bezahlt'),
-(5, 12, 'Karte', 11.20, TIMESTAMP(CURDATE() - INTERVAL 3 DAY, '20:00:00'), 'bezahlt'),
-(6, 13, 'Karte', 22.80, TIMESTAMP(CURDATE() - INTERVAL 5 DAY, '19:00:00'), 'bezahlt');

@@ -1,8 +1,11 @@
-import { useRouter } from '@tanstack/react-router';
-import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
+import { useRouter } from "@tanstack/react-router";
+import { createContext, ReactNode, useCallback, useContext, useState } from "react";
 
-export type Meldung = { t: 'ok' | 'fehler'; x: string } | null;
-interface Ctx { msg: Meldung; setMsg: (m: Meldung) => void }
+export type Meldung = { t: "ok" | "fehler"; x: string } | null;
+interface Ctx {
+  msg: Meldung;
+  setMsg: (m: Meldung) => void;
+}
 
 const MsgContext = createContext<Ctx>({ msg: null, setMsg: () => undefined });
 export const useMsg = () => useContext(MsgContext);
@@ -25,10 +28,10 @@ export function useAktion() {
       let ok = true;
       try {
         const text = await fn();
-        if (text) setMsg({ t: 'ok', x: text });
+        if (text) setMsg({ t: "ok", x: text });
       } catch (e) {
         ok = false;
-        setMsg({ t: 'fehler', x: (e as Error).message });
+        setMsg({ t: "fehler", x: (e as Error).message });
       }
       await router.invalidate();
       return ok;

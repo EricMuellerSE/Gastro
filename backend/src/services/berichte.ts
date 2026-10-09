@@ -1,8 +1,8 @@
-import { pool, q } from '../db';
-import { Rolle, darf, datumStr, rechnungsnummer, runden } from '../util';
+import { pool, q } from "../db";
+import { Rolle, darf, datumStr, rechnungsnummer, runden } from "../util";
 
 export async function umsatzWoche(rolle: Rolle) {
-  darf(rolle, 'umsatz');
+  darf(rolle, "umsatz");
   const von = new Date();
   von.setHours(0, 0, 0, 0);
   von.setDate(von.getDate() - ((von.getDay() + 6) % 7)); // Montag
@@ -23,7 +23,7 @@ export async function umsatzWoche(rolle: Rolle) {
     ),
     q<{ zeit: Date; gesamt: number }>(
       pool,
-      'SELECT zeitpunkt AS zeit, ROUND(menge * einzelpreis, 2) AS gesamt FROM nachbestellung WHERE zeitpunkt >= ? AND zeitpunkt < ?',
+      "SELECT zeitpunkt AS zeit, ROUND(menge * einzelpreis, 2) AS gesamt FROM nachbestellung WHERE zeitpunkt >= ? AND zeitpunkt < ?",
       [von, bis],
     ),
   ]);
@@ -32,8 +32,12 @@ export async function umsatzWoche(rolle: Rolle) {
     const d = new Date(von);
     d.setDate(d.getDate() + i);
     const key = datumStr(d);
-    const einnahmen = runden(liste.filter((b) => datumStr(b.zeit) === key).reduce((s, b) => s + b.betrag, 0));
-    const kosten = runden(kostenZeilen.filter((k) => datumStr(k.zeit) === key).reduce((s, k) => s + k.gesamt, 0));
+    const einnahmen = runden(
+      liste.filter((b) => datumStr(b.zeit) === key).reduce((s, b) => s + b.betrag, 0),
+    );
+    const kosten = runden(
+      kostenZeilen.filter((k) => datumStr(k.zeit) === key).reduce((s, k) => s + k.gesamt, 0),
+    );
     return { datum: d, einnahmen, kosten, ergebnis: runden(einnahmen - kosten) };
   });
   const einnahmen = runden(tage.reduce((s, t) => s + t.einnahmen, 0));
@@ -43,8 +47,17 @@ export async function umsatzWoche(rolle: Rolle) {
 }
 
 export async function rechnungen(rolle: Rolle) {
-  darf(rolle, 'rechnungen');
-  const rows = await q<{ id: number; zeit: Date; artikel: string; grund: string; menge: number; einheit: string | null; einzelpreis: number; gesamt: number }>(
+  darf(rolle, "rechnungen");
+  const rows = await q<{
+    id: number;
+    zeit: Date;
+    artikel: string;
+    grund: string;
+    menge: number;
+    einheit: string | null;
+    einzelpreis: number;
+    gesamt: number;
+  }>(
     pool,
     `SELECT n.ID AS id, n.zeitpunkt AS zeit, n.artikelname AS artikel, n.grund, n.menge,
             z.mengeneinheit AS einheit, n.einzelpreis, ROUND(n.menge * n.einzelpreis, 2) AS gesamt

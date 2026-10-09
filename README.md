@@ -57,18 +57,18 @@ einmalig aus der Liste der Datenbank gewählt; danach ist sie gesperrt.
 
 ## Abbildung der Vorlage auf die Datenbank
 
-| Oberfläche | Datenbank |
-|---|---|
-| Lagerartikel (eine Zeile) | `lager` + `charge` + `zutat` (Zeile = Zutat + Charge) |
-| Bestand / Mindestmenge | `lager.lagerbestand` / `lager.mindestlagerbestand` |
-| Haltbar bis | `charge.mindesthalbarkeit` |
-| Nachbestellmenge, Einkaufspreis (je Einheit) | `zutat.nachbestellmenge`, `zutat.einkaufspreis` (ergänzt) |
-| Automatische Nachbestellung | neue Charge + `nachbestellung` (Rechnung/Protokoll) + `lagerbewegung` |
-| Bestellung / Menge | `bestellung`, `bestellposition` (Spalte `menge` ergänzt) |
-| Eigene Bestellung | `bestellung` mit `mitarbeiterID`, ohne Tisch |
-| Tablet-Bestellung | `bestellung` mit `tischID`, ohne Mitarbeiter |
-| „bezahlt“, Umsatz | `zahlung` mit Status `bezahlt` |
-| Mitarbeiter löschen | `mitarbeiter.aktiv = FALSE` (Bestellungen bleiben erhalten) |
+| Oberfläche                                   | Datenbank                                                             |
+| -------------------------------------------- | --------------------------------------------------------------------- |
+| Lagerartikel (eine Zeile)                    | `lager` + `charge` + `zutat` (Zeile = Zutat + Charge)                 |
+| Bestand / Mindestmenge                       | `lager.lagerbestand` / `lager.mindestlagerbestand`                    |
+| Haltbar bis                                  | `charge.mindesthalbarkeit`                                            |
+| Nachbestellmenge, Einkaufspreis (je Einheit) | `zutat.nachbestellmenge`, `zutat.einkaufspreis` (ergänzt)             |
+| Automatische Nachbestellung                  | neue Charge + `nachbestellung` (Rechnung/Protokoll) + `lagerbewegung` |
+| Bestellung / Menge                           | `bestellung`, `bestellposition` (Spalte `menge` ergänzt)              |
+| Eigene Bestellung                            | `bestellung` mit `mitarbeiterID`, ohne Tisch                          |
+| Tablet-Bestellung                            | `bestellung` mit `tischID`, ohne Mitarbeiter                          |
+| „bezahlt“, Umsatz                            | `zahlung` mit Status `bezahlt`                                        |
+| Mitarbeiter löschen                          | `mitarbeiter.aktiv = FALSE` (Bestellungen bleiben erhalten)           |
 
 Automatische Überwachung (alle 5 s): Ist die Summe über alle Chargen einer Zutat ≤ Mindestmenge, wird die
 Nachbestellmenge als neue Charge eingebucht. Abgelaufene Chargen werden als „Schwund“ ausgebucht und ersetzt.

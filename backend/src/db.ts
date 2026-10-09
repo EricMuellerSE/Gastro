@@ -1,9 +1,9 @@
-import mysql, { Pool, PoolConnection, ResultSetHeader } from 'mysql2/promise';
-import { config } from './config';
+import mysql, { Pool, PoolConnection, ResultSetHeader } from "mysql2/promise";
+import { config } from "./config";
 
 export const pool: Pool = mysql.createPool({
   ...config.db,
-  charset: 'utf8mb4',
+  charset: "utf8mb4",
   decimalNumbers: true, // DECIMAL-Spalten als Zahl statt als String liefern
   connectionLimit: 10,
 });

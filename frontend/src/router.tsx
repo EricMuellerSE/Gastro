@@ -1,12 +1,20 @@
 import {
-  createRootRoute, createRoute, createRouter, Link, Outlet, redirect, useNavigate, useRouter, useRouterState,
-} from '@tanstack/react-router';
-import { ReactElement, useEffect } from 'react';
-import { api } from './api';
-import { istRolle, Rolle, ROLLEN, TABS } from './constants';
-import { MsgProvider, useMsg } from './store';
-import { LoginSeite } from './views/Login';
-import { VIEWS } from './views';
+  createRootRoute,
+  createRoute,
+  createRouter,
+  Link,
+  Outlet,
+  redirect,
+  useNavigate,
+  useRouter,
+  useRouterState,
+} from "@tanstack/react-router";
+import { ReactElement, useEffect } from "react";
+import { api } from "./api";
+import { istRolle, Rolle, ROLLEN, TABS } from "./constants";
+import { MsgProvider, useMsg } from "./store";
+import { LoginSeite } from "./views/Login";
+import { VIEWS } from "./views";
 
 const ersterTab = (rolle: Rolle) => TABS[rolle][0][0];
 
@@ -22,21 +30,21 @@ const rootRoute = createRootRoute({
 // "/" -> Ansicht der eigenen Rolle, ohne Anmeldung die Anmeldeseite
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/',
+  path: "/",
   beforeLoad: async () => {
     const { benutzer } = await api.ich();
-    if (benutzer) throw redirect({ to: '/$rolle', params: { rolle: benutzer.rolle } });
-    throw redirect({ to: '/login' });
+    if (benutzer) throw redirect({ to: "/$rolle", params: { rolle: benutzer.rolle } });
+    throw redirect({ to: "/login" });
   },
 });
 
 // "/login" (bereits angemeldet -> direkt zur eigenen Ansicht)
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: 'login',
+  path: "login",
   beforeLoad: async () => {
     const { benutzer } = await api.ich();
-    if (benutzer) throw redirect({ to: '/$rolle', params: { rolle: benutzer.rolle } });
+    if (benutzer) throw redirect({ to: "/$rolle", params: { rolle: benutzer.rolle } });
   },
   component: LoginSeite,
 });
@@ -44,14 +52,15 @@ const loginRoute = createRoute({
 /* ---------- /$rolle: Kopf mit Ansichtsumschalter und Konto, Navigation, Hinweisfeld ---------- */
 const rolleRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '$rolle',
+  path: "$rolle",
   beforeLoad: async ({ params }) => {
-    if (!istRolle(params.rolle)) throw redirect({ to: '/' });
+    if (!istRolle(params.rolle)) throw redirect({ to: "/" });
     const { benutzer } = await api.ich();
     // Die Kundenansicht (Tablet) ist ohne Anmeldung erreichbar, alle anderen Ansichten nur für die eigene Rolle
-    if (params.rolle !== 'kunde') {
-      if (!benutzer) throw redirect({ to: '/login' });
-      if (benutzer.rolle !== params.rolle) throw redirect({ to: '/$rolle', params: { rolle: benutzer.rolle } });
+    if (params.rolle !== "kunde") {
+      if (!benutzer) throw redirect({ to: "/login" });
+      if (benutzer.rolle !== params.rolle)
+        throw redirect({ to: "/$rolle", params: { rolle: benutzer.rolle } });
     }
     return { benutzer };
   },
@@ -81,11 +90,11 @@ function RolleLayout(): ReactElement {
 
   const abmelden = async () => {
     await api.logout();
-    await navigate({ to: '/$rolle', params: { rolle: 'kunde' } }); // Tablet kehrt in die Kundenansicht zurück
+    await navigate({ to: "/$rolle", params: { rolle: "kunde" } }); // Tablet kehrt in die Kundenansicht zurück
     await router.invalidate();
   };
   // Angemeldete Mitarbeiter wechseln zwischen ihrer Rolle und der Kundenansicht; Gäste sehen nur die Kundenansicht
-  const ansichten: Rolle[] = benutzer ? [benutzer.rolle, 'kunde'] : [];
+  const ansichten: Rolle[] = benutzer ? [benutzer.rolle, "kunde"] : [];
 
   return (
     <>
@@ -96,7 +105,11 @@ function RolleLayout(): ReactElement {
             {ansichten.length > 0 && (
               <div id="rollen" role="group" aria-label="Ansicht wählen">
                 {ansichten.map((r) => (
-                  <button key={r} aria-pressed={r === rolle} onClick={() => navigate({ to: '/$rolle', params: { rolle: r } })}>
+                  <button
+                    key={r}
+                    aria-pressed={r === rolle}
+                    onClick={() => navigate({ to: "/$rolle", params: { rolle: r } })}
+                  >
                     {ROLLEN[r]}
                   </button>
                 ))}
@@ -109,7 +122,7 @@ function RolleLayout(): ReactElement {
                   <button onClick={abmelden}>Abmelden</button>
                 </>
               ) : (
-                <button onClick={() => navigate({ to: '/login' })}>Login</button>
+                <button onClick={() => navigate({ to: "/login" })}>Login</button>
               )}
             </div>
           </div>
@@ -117,11 +130,17 @@ function RolleLayout(): ReactElement {
       </header>
       <nav id="nav" aria-label="Bereiche">
         {TABS[rolle].map(([k, t]) => (
-          <Link key={k} to="/$rolle/$tab" params={{ rolle, tab: k }}>{t}</Link>
+          <Link key={k} to="/$rolle/$tab" params={{ rolle, tab: k }}>
+            {t}
+          </Link>
         ))}
       </nav>
       <main id="main">
-        {msg && <p className={`hinweis ${msg.t}`} role="status">{msg.x}</p>}
+        {msg && (
+          <p className={`hinweis ${msg.t}`} role="status">
+            {msg.x}
+          </p>
+        )}
         <Outlet />
       </main>
     </>
@@ -131,19 +150,22 @@ function RolleLayout(): ReactElement {
 // "/admin" -> erster Reiter der Rolle
 const rolleIndexRoute = createRoute({
   getParentRoute: () => rolleRoute,
-  path: '/',
+  path: "/",
   beforeLoad: ({ params }) => {
-    throw redirect({ to: '/$rolle/$tab', params: { rolle: params.rolle, tab: ersterTab(params.rolle as Rolle) } });
+    throw redirect({
+      to: "/$rolle/$tab",
+      params: { rolle: params.rolle, tab: ersterTab(params.rolle as Rolle) },
+    });
   },
 });
 
 /* ---------- /$rolle/$tab: lädt die Daten der Ansicht per Loader ---------- */
 const tabRoute = createRoute({
   getParentRoute: () => rolleRoute,
-  path: '$tab',
+  path: "$tab",
   beforeLoad: ({ params }) => {
     if (!TABS[params.rolle as Rolle].some(([k]) => k === params.tab)) {
-      throw redirect({ to: '/$rolle', params: { rolle: params.rolle } });
+      throw redirect({ to: "/$rolle", params: { rolle: params.rolle } });
     }
   },
   loader: ({ params }) => VIEWS[params.tab].load(params.rolle as Rolle),
@@ -159,15 +181,21 @@ function TabSeite(): ReactElement {
 }
 
 /* ---------- Router ---------- */
-const routeTree = rootRoute.addChildren([indexRoute, loginRoute, rolleRoute.addChildren([rolleIndexRoute, tabRoute])]);
+const routeTree = rootRoute.addChildren([
+  indexRoute,
+  loginRoute,
+  rolleRoute.addChildren([rolleIndexRoute, tabRoute]),
+]);
 
 export const router = createRouter({
   routeTree,
-  defaultErrorComponent: ({ error }) => <p className="hinweis fehler">{error instanceof Error ? error.message : String(error)}</p>,
+  defaultErrorComponent: ({ error }) => (
+    <p className="hinweis fehler">{error instanceof Error ? error.message : String(error)}</p>
+  ),
   defaultNotFoundComponent: () => <p className="hinweis fehler">Seite nicht gefunden.</p>,
 });
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }
